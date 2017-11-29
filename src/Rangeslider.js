@@ -328,55 +328,49 @@ class Slider extends Component {
     }
 
     return (
-      <div className='rangeSlide-outer'
+      <div
+        ref={s => {
+          this.slider = s
+        }}
+        className={cx(
+          'rangeslider',
+          `rangeslider-${orientation}`,
+          { 'rangeslider-reverse': reverse },
+          className
+        )}
         onMouseDown={this.handleDrag}
-          onMouseUp={this.handleEnd}
-          onTouchStart={this.handleStart}
-          onTouchEnd={this.handleEnd}
+        onMouseUp={this.handleEnd}
+        aria-valuemin={min}
+        aria-valuemax={max}
+        aria-valuenow={value}
+        aria-orientation={orientation}
       >
+        <div className='rangeslider__fill' style={fillStyle} />
         <div
-          ref={s => {
-            this.slider = s
+          ref={sh => {
+            this.handle = sh
           }}
-          className={cx(
-            'rangeslider',
-            `rangeslider-${orientation}`,
-            { 'rangeslider-reverse': reverse },
-            className
-          )}
-          
-          aria-valuemin={min}
-          aria-valuemax={max}
-          aria-valuenow={value}
-          aria-orientation={orientation}
+          className='rangeslider__handle'
+          onMouseDown={this.handleStart}
+          onTouchMove={this.handleDrag}
+          onTouchEnd={this.handleEnd}
+          onKeyDown={this.handleKeyDown}
+          style={handleStyle}
+          tabIndex={0}
         >
-          <div className='rangeslider__fill' style={fillStyle} />
-          <div
-            ref={sh => {
-              this.handle = sh
-            }}
-            className='rangeslider__handle'
-            onMouseDown={this.handleStart}
-            onTouchMove={this.handleDrag}
-            onTouchEnd={this.handleEnd}
-            onKeyDown={this.handleKeyDown}
-            style={handleStyle}
-            tabIndex={0}
-          >
-            {showTooltip
-              ? <div
-                ref={st => {
-                  this.tooltip = st
-                }}
-                className='rangeslider__handle-tooltip'
-                >
-                <span>{this.handleFormat(value)}</span>
-              </div>
-              : null}
-            <div className='rangeslider__handle-label'>{handleLabel}</div>
-          </div>
-          {labels ? this.renderLabels(labelItems) : null}
+          {showTooltip
+            ? <div
+              ref={st => {
+                this.tooltip = st
+              }}
+              className='rangeslider__handle-tooltip'
+              >
+              <span>{this.handleFormat(value)}</span>
+            </div>
+            : null}
+          <div className='rangeslider__handle-label'>{handleLabel}</div>
         </div>
+        {labels ? this.renderLabels(labelItems) : null}
       </div>
     )
   }
